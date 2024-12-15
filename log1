@@ -1,0 +1,17 @@
+[33mcommit a96a12a94814679787b90a10a4b23e9b9ca946f0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Laury4005 <laurypd@gmail.com>
+Date:   Sun Dec 15 15:16:02 2024 -0500
+
+    Comment microservice, User microservice
+
+[33mcommit f8912c7c1a2bc726b6f621b3e973e8afc6a7c88e[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Laury4005 <laurypd@gmail.com>
+Date:   Sat Dec 14 22:19:52 2024 -0500
+
+    API REST CRUD
+
+[33mcommit 33d42648d5e887d96667b200f2aaca5efb33c991[m
+Author: Laury4005 <73259066+Laury4005@users.noreply.github.com>
+Date:   Fri Dec 13 15:15:44 2024 -0500
+
+    Initial commit

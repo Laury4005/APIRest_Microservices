@@ -1,6 +1,6 @@
 // src/controllers/userController.ts
 import { Request, Response } from "express";
-import User, { IUser } from "../models/User";
+import User, { IUser } from "../models/user";
 
 
 export const getUsers = async (req: Request, res: Response) => {
