@@ -1,5 +1,11 @@
 import { Router } from 'express';
-import { getUsers, createUser, getUserByEmail, updateUserByEmail, deleteUserByEmail } from '../controllers/userController';
+import { getUsers, 
+         createUser, 
+         getUserByEmail, 
+         updateUserByEmail, 
+         deleteUserByEmail, 
+         deleteUserAndComments 
+        } from '../controllers/userController';
 
 const router = Router();
 
@@ -11,5 +17,5 @@ router.post('/', createUser);
 // Rutas para actualizar y eliminar un usuario por correo
 router.put('/email/:email', updateUserByEmail);  // Actualizar por correo
 router.delete('/email/:email', deleteUserByEmail);  // Eliminar por correo
-
+router.delete('/delete-with-comments/:email', deleteUserAndComments); // Método nuevo
 export default router;
