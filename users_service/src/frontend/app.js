@@ -1,3 +1,32 @@
+// Función para obtener los comentarios de un usuario por su ID
+async function viewComments(userId) {
+  try {
+      // Obtener los comentarios del usuario desde la API
+      const response = await fetch(`http://localhost:4000/api/comments/userId/${userId}`);
+      const comments = await response.json();
+
+      // Llenar el contenedor con los comentarios
+      const commentsContainer = document.getElementById('commentsContainer');
+      commentsContainer.innerHTML = ""; // Limpiar el contenedor antes de agregar los comentarios
+
+      if (comments.length === 0) {
+          commentsContainer.innerHTML = "<p>No hay comentarios para este usuario.</p>";
+      } else {
+          comments.forEach(comment => {
+              const commentDiv = document.createElement('div');
+              commentDiv.classList.add('comment');
+              commentDiv.innerHTML = `<p><strong>Comentario:</strong> ${comment.comment}</p>`;
+              commentsContainer.appendChild(commentDiv);
+          });
+      }
+
+      // Mostrar el modal con los comentarios
+      $('#viewCommentsModal').modal('show');
+  } catch (error) {
+      console.error("Error al cargar los comentarios:", error);
+  }
+}
+
 // Función para cargar los usuarios cuando se haga clic en el botón
 async function getUsers() {
   const userTableBody = document.getElementById('userTableBody');
@@ -29,6 +58,7 @@ async function getUsers() {
               <td>${user.name}</td>
               <td>${user.email}</td>
               <td>
+                  <button class="btn btn-secondary" onclick="viewComments('${user._id}')">Ver Comentarios</button>
                   <button class="btn btn-warning" onclick="editUser('${user._id}')">Editar</button>
                   <button class="btn btn-danger" onclick="deleteUser('${user._id}')">Eliminar</button>
               </td>
