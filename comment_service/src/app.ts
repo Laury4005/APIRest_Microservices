@@ -11,14 +11,14 @@ import commentRoutes from "./routes/commentRoutes";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = 4000;
 
 // Middlewares
 app.use(cors());
 app.use(bodyParser.json());
 
 // Conexión a MongoDB
-const dbURI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/CommentsDB";  // Cambiar si es necesario
+const dbURI = "mongodb://lp:lp@127.0.0.1:27017/CommentsDB";   // Cambiar si es necesario
 mongoose
   .connect(dbURI)
   .then(() => {

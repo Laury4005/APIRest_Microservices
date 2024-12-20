@@ -18,7 +18,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Conexión a MongoDB
-const dbURI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/db1";  // Cambiar si es necesario
+const dbURI = "mongodb://lp:lp@127.0.0.1:27017/db1";  // Cambiar si es necesario
 mongoose
   .connect(dbURI)
   .then(() => {

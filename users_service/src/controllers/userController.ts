@@ -9,7 +9,8 @@ export const getUsers = async (req: Request, res: Response) => {
     const users = await User.find();
     res.json(users);
   } catch (error) {
-    res.status(500).json({ error: "Error al obtener usuarios" });
+    console.error("Error completo:", error);
+    res.status(500).json({ error: "Error al obtener usuarios", details: error.message });
   }
 };
 
@@ -27,23 +28,39 @@ export const createUser = async (req: Request, res: Response) => {
 
 // Buscar usuario por email
 export const getUserByEmail = async (req: Request, res: Response) => {
+  const { email } = req.params;
+
   try {
-    const { email } = req.params;
+    // Buscar el usuario por email
     const user = await User.findOne({ email });
 
     if (!user) {
-       res.status(404).json({ error: "Usuario no encontrado" });
+      res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
-    // Solicitud a otro microservicio para obtener comentarios del usuario
-    const commentsResponse = await axios.get(`/comments/user/${email}`);
-    const comments = commentsResponse.data;
-
-    res.json({ user, comments });
+    // Responder con el 'userId' y otros datos del usuario si es necesario
+    res.json({ _id: user._id, email: user.email, name: user.name });
   } catch (error) {
-    res.status(500).json({ error: "Error al obtener el usuario", details: error });
+    res.status(500).json({ error: 'Error al obtener el usuario', details: error });
   }
 };
+
+export const getUserById = async (req: Request, res: Response) => {
+  const { userId } = req.params;  // Extraemos el userId desde los parámetros de la ruta
+
+  try {
+    const user = await User.findById(userId);  // Buscar al usuario por su ID
+
+    if (!user) {
+      res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json(user);  // Si el usuario existe, devolver los datos
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener el usuario', details: error });
+  }
+};
+
 
 // Actualizar un usuario por correo
 export const updateUserByEmail = async (req: Request, res: Response) => {
@@ -62,6 +79,24 @@ export const updateUserByEmail = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Error al actualizar usuario", details: error });
   }
 };
+
+export const updateUserById = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  const updates = req.body;
+
+  try {
+    const user = await User.findByIdAndUpdate(userId, updates, { new: true });
+
+    if (!user) {
+       res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al actualizar el usuario', details: error });
+  }
+};
+
 
 // Eliminar un usuario por correo
 export const deleteUserByEmail = async (req: Request, res: Response) => {

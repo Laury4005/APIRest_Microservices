@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import Comment from "../models/comment";
 import mongoose from "mongoose";
+import axios from "../axiosConfig"; // Importa la configuración de Axios
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Obtener todos los comentarios
 export const getComments = async (req: Request, res: Response) => {
@@ -82,5 +85,37 @@ export const updateCommentByUserId = async (req: Request, res: Response) => {
   } catch (error) {
     // Enviar error si ocurre un problema en la actualización
     res.status(500).json({ error: "Error al actualizar comentario" });
+  }
+};
+
+// Endpoint para obtener los comentarios de un usuario por su email
+export const getCommentsByUserEmail = async (req: Request, res: Response) => {
+  const { email } = req.params;  // Extrae el email de los parámetros
+
+  try {
+    // Solicitud HTTP al microservicio de usuarios para obtener el 'userId' por el email
+    const userResponse = await axios.get(`http://localhost:5000/api/users/email/${email}`);
+    
+    if (!userResponse.data) {
+      res.status(404).json({ error: 'Usuario no encontrado' });
+      return; // Salimos de la función si no encontramos el usuario
+    }
+
+    const userId = userResponse.data._id; // Asegúrate que '_id' es el valor correcto
+    console.log("userId encontrado:", userId);
+
+    // Usamos directamente el 'userId' en la consulta, sin necesidad de conversión explícita
+    const comments = await Comment.find({ userId });
+
+    console.log("Comentarios encontrados:", comments);
+
+    if (comments.length === 0) {
+      res.status(404).json({ error: 'No se encontraron comentarios para este usuario', userId });
+    } else {
+      res.json(comments);
+    }
+  } catch (error) {
+    console.error("Error al obtener comentarios:", error);
+    res.status(500).json({ error: 'Error al obtener comentarios', details: error });
   }
 };
